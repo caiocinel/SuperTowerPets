@@ -4,10 +4,10 @@ export default class Track {
     public orientation: 'x' | 'y' | '-x' | '-y';
     public position: { x: number, y: number; };
 
-    constructor() {
+    constructor({ length = 0, orientation = 'x'} = {}) {
         this.id = Math.random();
-        this.length = 0;
-        this.orientation = 'x';
+        this.length = length;
+        this.orientation = orientation as 'x' | 'y' | '-x' | '-y';
         this.position = { x: 0, y: 0 };
     }
     
