@@ -10,6 +10,18 @@ export default class Track {
         this.orientation = 'x';
         this.position = { x: 0, y: 0 };
     }
+    
+    public isFinished(curPos: {x: number, y:number}) {
+        if (this.orientation === 'x') {
+            if (curPos.x >= this.position.x + this.length)
+                return true;
+        }
+        if (this.orientation === 'y') {
+            if (curPos.y >= this.position.y + this.length)
+                return true;
+        }
+        return false;        
+    }
 
 
     public mountToElement(element: HTMLDivElement) {
