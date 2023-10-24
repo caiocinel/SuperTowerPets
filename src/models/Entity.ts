@@ -35,7 +35,7 @@ export default class Entity{
         
         entityElement.id = this.id.toString();
         entityElement.className = 'entity';
-        entityElement.innerText = '🐇';
+        entityElement.innerText = '🛠️';
 
         entityElement.style.left = `${this.position.x * 100}%`;
         entityElement.style.top = `${this.position.y * 100}%`;
