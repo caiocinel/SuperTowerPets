@@ -31,16 +31,7 @@ export default class Track {
         return false;        
     }
 
-
-    public mountToElement(element: HTMLDivElement) {
-        if(!element)
-            return alert("mountToElement bad parameter");
-
-        const trackElement = document.createElement('div');
-        trackElement.id = this.id.toString();
-        trackElement.className = 'track';
-
-
+    private _calculateTrackSize(trackElement: HTMLDivElement){
         if (this.orientation === 'x') {
             const spacing = this.position.x * window.innerWidth;
             const length = this.length * window.innerWidth;
@@ -69,17 +60,29 @@ export default class Track {
 
             if (spacing - length < 0)
                 trackElement.style.width = `${spacing}px`;
-            else            
+            else
                 trackElement.style.width = `${length}px`;
 
             trackElement.style.height = '10px';
         }
         if (this.orientation === '-y') {
             const length = this.length * window.innerHeight;
-            
+
             trackElement.style.height = `${length + 10}px`;
             trackElement.style.width = '10px';
         }
+    }
+
+
+    public mountToElement(element: HTMLDivElement) {
+        if(!element)
+            return alert("mountToElement bad parameter");
+
+        const trackElement = document.createElement('div');
+        trackElement.id = this.id.toString();
+        trackElement.className = 'track';
+        
+        this._calculateTrackSize(trackElement);
 
         trackElement.style.left = `${this.position.x * 100}%`;
         trackElement.style.top = `${this.position.y * 100}%`;

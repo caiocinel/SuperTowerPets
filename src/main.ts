@@ -1,4 +1,5 @@
 import Entity from "./models/Entity";
+import Scene from "./models/Scene";
 import Track from "./models/Track";
 import Tracks from "./models/Tracks";
 
@@ -21,35 +22,14 @@ entity2.trackList = tracks;
 entity2.speed = 0.2;
 
 
-const resetFrame = () => {
-  console.info("Resetting frame");
-  const root = document.getElementById('app');
-
-  if(!root)
-    return alert("Failed to find application div");
-
-  root.innerHTML = '';
-
-  const tracksRoot = document.createElement('div');
-  tracksRoot.id = 'tracks';
-  root.appendChild(tracksRoot);
-
-  const entitiesRoot = document.createElement('div');
-  entitiesRoot.id = 'entities';
-  root.appendChild(entitiesRoot);
-
-  const petsRoot = document.createElement('div');
-  petsRoot.id = 'pets';
-  root.appendChild(petsRoot);
-  
-  
-  tracks.draw();
-}
+const scene = new Scene();
+scene.entities = [entity, entity2];
+scene.tracks = tracks;
 
 document.addEventListener('DOMContentLoaded', () => {
   (document.getElementById('forceRender') as HTMLButtonElement).onclick = () => entityRun();
-  resetFrame();
-})
+  scene.render()
+});
 
 const entityRun = async() => {
   entity.run();  
@@ -58,4 +38,4 @@ const entityRun = async() => {
 
 
 
-window.onresize = () => resetFrame();
+window.onresize = () => scene.render();
