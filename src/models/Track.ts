@@ -69,7 +69,7 @@ export default class Track {
 
             if (spacing - length < 0)
                 trackElement.style.width = `${spacing}px`;
-            else
+            else            
                 trackElement.style.width = `${length}px`;
 
             trackElement.style.height = '10px';

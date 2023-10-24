@@ -2,60 +2,71 @@ import Entity from "./models/Entity";
 import Track from "./models/Track";
 import Tracks from "./models/Tracks";
 
-const tracks = new Tracks();
+const tracks = new Tracks({x: 0, y: 0.3});
 
 var track = new Track();
-track.length = 0.3;
+track.length = 0.1;
 track.orientation = 'x';
-track.position = { x: 0, y: 0.3 };
 tracks.push(track);
 
 var track = new Track();
-track.length = 0.3;
+track.length = 0.2;
 track.orientation = 'y';
-track.position = { x: 0.3, y: 0.3 };
 tracks.push(track);
 
 var track = new Track();
 track.length = 0.4;
 track.orientation = 'x';
-track.position = { x: 0.30, y: 0.6 };
 tracks.push(track);
 
 var track = new Track();
 track.length = 0.3;
 track.orientation = 'y';
-track.position = { x: 0.7, y: 0.6 };
 tracks.push(track);
 
 var track = new Track();
 track.length = 0.1;
 track.orientation = 'x';
-track.position = { x: 0.7, y: 0.9 };
 tracks.push(track);
 
 var track = new Track();
-track.length = 0.6;
+track.length = 0.4;
 track.orientation = '-y';
-track.position = { x: 0.8, y: 0.3 };
 tracks.push(track);
 
 var track = new Track();
-track.length = 0.6;
+track.length = 0.1;
 track.orientation = '-x';
-track.position = { x: 0.4, y: 0.3 };
+tracks.push(track);
+
+var track = new Track();
+track.length = 0.1;
+track.orientation = '-y';
 tracks.push(track);
 
 var track = new Track();
 track.length = 0.2;
-track.orientation = '-y';
-track.position = { x: 0.4, y: 0.1 };
+track.orientation = 'x';
 tracks.push(track);
 
 var track = new Track();
-track.length = 0.6;
+track.length = 0.1;
+track.orientation = 'y';
+tracks.push(track);
+
+var track = new Track();
+track.length = 0.1;
 track.orientation = 'x';
-track.position = { x: 0.4, y: 0.1 };
+tracks.push(track);
+
+var track = new Track();
+track.length = 0.1;
+track.orientation = 'y';
+tracks.push(track);
+
+var track = new Track();
+track.length = 0.1;
+track.orientation = 'x';
 tracks.push(track);
 
 const entity = new Entity();
