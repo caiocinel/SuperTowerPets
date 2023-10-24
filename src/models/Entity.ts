@@ -8,6 +8,7 @@ export default class Entity{
     public currentTrack: Track | null;
     public isMoving: boolean;
     public speed: number;
+    public drawTimeout: number | null;
         
     constructor() {
         this.id = Math.random();
@@ -16,6 +17,7 @@ export default class Entity{
         this.isMoving = false;
         this.trackList = null;
         this.speed = 0.1;
+        this.drawTimeout = null;
     }   
     
     public draw(){
@@ -52,7 +54,11 @@ export default class Entity{
     }
 
     public async walk(){
-        setTimeout(async() => {
+        
+        if(this.drawTimeout)
+            clearTimeout(this.drawTimeout);
+
+        this.drawTimeout = setTimeout(async() => {
             if(!this.currentTrack || !this.trackList)
                 return;
 

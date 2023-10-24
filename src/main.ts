@@ -6,15 +6,19 @@ const tracks = new Tracks({x: 0, y: 0.3});
 
 tracks.push(new Track({ length: 0.1, orientation: 'x' }));
 tracks.push(new Track({ length: 0.2, orientation: 'y' }));
-tracks.push(new Track({ length: 0.4, orientation: 'x' }));
+tracks.push(new Track({ length: 0.2, orientation: 'x' }));
 tracks.push(new Track({length: 0.3, orientation: 'y'}));
 tracks.push(new Track({length: 0.1, orientation: 'x'}));
-tracks.push(new Track({length: 0.4, orientation: '-y'}));
+tracks.push(new Track({length: 0.7, orientation: '-y'}));
 tracks.push(new Track({length: 0.1, orientation: 'x'}));
 
 
 const entity = new Entity();
 entity.trackList = tracks;
+
+const entity2 = new Entity();
+entity2.trackList = tracks;
+entity2.speed = 0.2;
 
 
 const resetFrame = () => {
@@ -48,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 const entityRun = async() => {
-  await entity.run();
+  entity.run();  
+  entity2.run();
 }
 
 
