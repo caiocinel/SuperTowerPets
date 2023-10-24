@@ -15,7 +15,7 @@ export default class Entity{
         this.currentTrack = null;
         this.isMoving = false;
         this.trackList = null;
-        this.speed = 0.5;
+        this.speed = 0.1;
     }   
     
     public draw(){
@@ -52,14 +52,13 @@ export default class Entity{
     }
 
     public async walk(){
-        //60fps timeout
         setTimeout(async() => {
             if(!this.currentTrack || !this.trackList)
                 return;
 
             if(!this.isMoving)
                 return;
-
+            
             if(this.currentTrack.isFinished(this.position)){
                 const nextTrack = this.trackList.items[this.trackList.items.indexOf(this.currentTrack) + 1];
                 if(nextTrack){
@@ -76,6 +75,12 @@ export default class Entity{
                 }
                 if(this.currentTrack.orientation === 'y'){
                     this.position.y += this.speed / 60;
+                }
+                if(this.currentTrack.orientation === '-x'){
+                    this.position.x -= this.speed / 60;
+                }
+                if(this.currentTrack.orientation === '-y'){
+                    this.position.y -= this.speed / 60;
                 }
                 this.draw();
                 await this.walk();

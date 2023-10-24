@@ -1,7 +1,7 @@
 export default class Track {
     public id: number;
     public length: number;
-    public orientation: 'x' | 'y';
+    public orientation: 'x' | 'y' | '-x' | '-y';
     public position: { x: number, y: number; };
 
     constructor() {
@@ -18,7 +18,15 @@ export default class Track {
         }
         if (this.orientation === 'y') {
             if (curPos.y >= this.position.y + this.length)
-                return true;
+                return true;            
+        }
+        if (this.orientation === '-x') {
+            if (curPos.x <= this.position.x)
+                return true;            
+        }
+        if (this.orientation === '-y') {
+            if (curPos.y <= this.position.y)
+                return true;            
         }
         return false;        
     }
@@ -53,6 +61,23 @@ export default class Track {
             else
                 trackElement.style.height = `${length}px`;
 
+            trackElement.style.width = '10px';
+        }
+        if (this.orientation === '-x') {
+            const spacing = this.position.x * window.innerWidth;
+            const length = this.length * window.innerWidth;
+
+            if (spacing - length < 0)
+                trackElement.style.width = `${spacing}px`;
+            else
+                trackElement.style.width = `${length}px`;
+
+            trackElement.style.height = '10px';
+        }
+        if (this.orientation === '-y') {
+            const length = this.length * window.innerHeight;
+            
+            trackElement.style.height = `${length + 10}px`;
             trackElement.style.width = '10px';
         }
 
