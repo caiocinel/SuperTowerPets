@@ -9,6 +9,7 @@ export default class Entity{
     public isMoving: boolean;
     public speed: number;
     public drawTimeout: number | null;
+    public character: string;
         
     constructor() {
         this.id = Math.random();
@@ -18,6 +19,7 @@ export default class Entity{
         this.trackList = null;
         this.speed = 0.1;
         this.drawTimeout = null;
+        this.character = '❓';
     }   
     
     public draw(){
@@ -35,7 +37,7 @@ export default class Entity{
         
         entityElement.id = this.id.toString();
         entityElement.className = 'entity';
-        entityElement.innerText = '🛠️';
+        entityElement.innerText = this.character;
 
         entityElement.style.left = `${this.position.x * 100}%`;
         entityElement.style.top = `${this.position.y * 100}%`;
