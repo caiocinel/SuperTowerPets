@@ -16,9 +16,15 @@ scene.newTrack({length: 0.1, orientation: 'x'});
 scene.newEntity({speed: 0.1, character: '🛠️'});
 scene.newEntity({speed: 0.3, character: '🔨'});
 
+scene.newItem({character: '🐀'});
+scene.newItem({ character: '🤣' });
+scene.newItem({ character: '🤡' });
+scene.newItem({ character: '🐀' });
+scene.newItem({ character: '🐀' });
+
 document.addEventListener('DOMContentLoaded', () => {
   (document.getElementById('forceRender') as HTMLButtonElement).onclick = () => scene.renderEntities();
-  scene.render()
+  scene.render()  
 });
 
 
