@@ -4,9 +4,10 @@ import Tower from "./Tower";
 import Track from "./Track";
 import Tracks from "./Tracks";
 
-export default class Scene{
+class Scene{
     public tracks: Tracks = new Tracks();
     public entities: Entity[] = [];
+    public towers: Tower[] = [];
     public inventory: Inventory = new Inventory();
 
     public setTracksInitialPosition({ x = 0, y = 0 }){
@@ -31,6 +32,13 @@ export default class Scene{
         this.entities.push(entity);
     }
 
+    public newPet({character = ''}){
+        const tower = new Tower();
+        tower.position = {x:0.5, y:0.5};
+        tower.character = character;
+        this.towers.push(tower);
+    }
+
     public renderEntities(){        
         if(this.tracks.items.length === 0)
             return alert("No tracks found");
@@ -41,6 +49,14 @@ export default class Scene{
 
             entity.run()
         });
+    }
+
+    public inventoryMoveHandler = (e: MouseEvent) => {
+        if(!this.inventory.movingItem)
+            return;
+
+        
+        
     }
 
 
@@ -61,9 +77,9 @@ export default class Scene{
         entitiesRoot.id = 'entities';
         root.appendChild(entitiesRoot);
 
-        const petsRoot = document.createElement('div');
-        petsRoot.id = 'pets';
-        root.appendChild(petsRoot);
+        const towersRoot = document.createElement('div');
+        towersRoot.id = 'towers';
+        root.appendChild(towersRoot);
 
         const uiRoot = document.createElement('div');
         uiRoot.id = 'ui';
@@ -74,10 +90,14 @@ export default class Scene{
         uiRoot.appendChild(inventory);
 
         const inventoryContainer = document.createElement('div');
-        inventoryContainer.className = 'inventoryContainer';
+        inventoryContainer.id = 'inventoryContainer';
         inventory.appendChild(inventoryContainer);
 
         this.tracks.draw();
         this.inventory.draw();
+        this.towers.forEach(tower => tower.draw());
     }
 }
+
+const scene = new Scene();
+export default scene;

@@ -1,3 +1,7 @@
+:root{  
+  --debug: solid 2px red;  
+}
+
 body {  
   background-color: #006a00;
   overflow: hidden;
@@ -40,7 +44,7 @@ body {
   border-radius: 10px;
 }
 
-.inventoryContainer{
+#inventoryContainer{
   position: absolute;
   display: flex;
   width: 60%;
@@ -68,6 +72,12 @@ body {
 
 .inventoryItemContainer:hover{
   background: #ffffff56;
+}
+
+.pet{
+  position: absolute;
+  font-size: 36px;
+  outline: var(--debug)
 }
 
 ::-webkit-scrollbar {  
