@@ -40,9 +40,21 @@ export default class Entity{
         entityElement.innerText = this.character;
 
         entityElement.style.left = `${this.position.x * 100}%`;
-        entityElement.style.top = `${this.position.y * 100}%`;
+        entityElement.style.top = `${this.position.y * 100}%`;       
 
         root.appendChild(entityElement);
+    }
+
+    public destroy(){
+        const root = document.getElementById('entities');
+
+        if (!root)
+            return alert("Failed to find entities div");    
+
+        var entityElement = document.getElementById(this.id.toString()) as HTMLDivElement;
+        
+        if(entityElement)
+            root.removeChild(entityElement);
     }
 
     public async run(){
@@ -52,7 +64,7 @@ export default class Entity{
         this.isMoving = true;
         this.currentTrack = this.trackList.items[0];
         this.position = { x: this.currentTrack.position.x, y: this.currentTrack.position.y };
-        await this.walk();
+        this.walk();
     }
 
     public async walk(){
@@ -62,11 +74,10 @@ export default class Entity{
 
         this.drawTimeout = setTimeout(async() => {
             if(!this.currentTrack || !this.trackList)
-                return;
-
-            if(!this.isMoving)
-                return;
+                return this.destroy();
             
+            if(!this.isMoving)
+                return this.destroy();
             if(this.currentTrack.isFinished(this.position)){
                 const nextTrack = this.trackList.items[this.trackList.items.indexOf(this.currentTrack) + 1];
                 if(nextTrack){
@@ -75,23 +86,18 @@ export default class Entity{
                 }
                 else{
                     this.isMoving = false;
+                    return this.destroy();
                 }
             }
             else{
-                if(this.currentTrack.orientation === 'x'){
-                    this.position.x += this.speed / 60;
-                }
-                if(this.currentTrack.orientation === 'y'){
-                    this.position.y += this.speed / 60;
-                }
-                if(this.currentTrack.orientation === '-x'){
-                    this.position.x -= this.speed / 60;
-                }
-                if(this.currentTrack.orientation === '-y'){
-                    this.position.y -= this.speed / 60;
-                }
+                switch(this.currentTrack.orientation){
+                    case 'x': this.position.x += this.speed / 120; break;
+                    case 'y': this.position.y += this.speed / 120; break;
+                    case '-x': this.position.x -= this.speed / 120; break;
+                    case '-y': this.position.y -= this.speed / 120; break;                    
+                }                
                 this.draw();
-                await this.walk();
+                this.walk();
             }
         }, 16);
     }
