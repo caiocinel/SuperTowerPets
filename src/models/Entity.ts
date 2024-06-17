@@ -39,8 +39,14 @@ export default class Entity{
         entityElement.className = 'entity';
         entityElement.innerText = this.character;
 
-        entityElement.style.left = `${this.position.x * 100}%`;
-        entityElement.style.top = `${this.position.y * 100}%`;       
+
+        var x = this.position.x - ((9 * (Math.round(window.devicePixelRatio * 100) / 100)) / window.innerWidth);
+        var y = this.position.y - ((9 * (Math.round(window.devicePixelRatio * 100) / 100)) / window.innerHeight);
+
+        entityElement.style.left = `${x * 100}%`;
+        entityElement.style.top = `${y * 100}%`; 
+        
+        console.log(entityElement.style.left);
 
         root.appendChild(entityElement);
     }
