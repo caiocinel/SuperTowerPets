@@ -6,6 +6,7 @@ body {
   background-color: #006a00;
   overflow: hidden;
   position: relative;
+  user-select: none;
 }
 
 #app {

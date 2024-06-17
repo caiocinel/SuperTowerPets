@@ -20,11 +20,8 @@ Scene.newItem({ character: '🧨' });
 Scene.newItem({ character: '🔭' });
 Scene.newItem({ character: '🧲' });
 
-Scene.newPet({ character: "🌵"});
-
 document.addEventListener('DOMContentLoaded', () => {
   (document.getElementById('forceRender') as HTMLButtonElement).onclick = () => Scene.renderEntities();
-  document.onmousemove = Scene.inventoryMoveHandler;
   Scene.render()  
 });
 

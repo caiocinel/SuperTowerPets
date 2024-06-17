@@ -1,5 +1,6 @@
 import Entity from "./Entity";
 import Inventory from "./Inventory";
+import KeyController from "./KeyController";
 import Tower from "./Tower";
 import Track from "./Track";
 import Tracks from "./Tracks";
@@ -9,6 +10,9 @@ class Scene{
     public entities: Entity[] = [];
     public towers: Tower[] = [];
     public inventory: Inventory = new Inventory();
+    public keyController: KeyController = new KeyController();
+
+    public drawThreadInterval: number | null = null;
 
     public setTracksInitialPosition({ x = 0, y = 0 }){
         this.tracks.initialPos = { x, y };
@@ -32,11 +36,27 @@ class Scene{
         this.entities.push(entity);
     }
 
-    public newPet({character = ''}){
+    public newTower({character = ''}){
         const tower = new Tower();
         tower.position = {x:0.5, y:0.5};
         tower.character = character;
         this.towers.push(tower);
+        return tower;
+    }
+
+    public addTower(tower: Tower){
+        this.towers.push(tower);
+        return tower;
+    }
+
+    public removeTower(id: number) {
+        const tower = this.towers.find(x => x.id === id);
+
+        if (!tower)
+            return alert("Failed to find tower");
+
+
+        return this.towers = this.towers.filter(x => x.id !== id);
     }
 
     public renderEntities(){        
@@ -51,14 +71,21 @@ class Scene{
         });
     }
 
-    public inventoryMoveHandler = (e: MouseEvent) => {
-        if(!this.inventory.movingItem)
-            return;
+    public renderMovingItem(){        
 
+        if (this.drawThreadInterval)
+            clearInterval(this.drawThreadInterval);
         
-        
+        this.drawThreadInterval = setInterval(() => {                        
+            if(this.towers.find(x => x.isMoving)){
+                if(!scene.keyController.isMouseDown)
+                    return this.towers.filter(x => x.isMoving).forEach(tower => tower.endMove());               
+
+                this.towers.find(x => x.isMoving)?.renderMovingItem();                
+            }
+        }, 16);
     }
-
+    
 
     public render(){
         console.info("Resetting frame");
@@ -96,6 +123,8 @@ class Scene{
         this.tracks.draw();
         this.inventory.draw();
         this.towers.forEach(tower => tower.draw());
+
+        this.renderMovingItem();
     }
 }
 
