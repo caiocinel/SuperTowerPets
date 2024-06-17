@@ -26,11 +26,16 @@ export default class Tower{
         entityElement.id = this.id.toString();
         entityElement.className = 'pet';
         entityElement.innerText = this.character;
+        entityElement.onmousedown = () => this.startMove();
 
         entityElement.style.left = `${this.position.x * 100}%`;
         entityElement.style.top = `${this.position.y * 100}%`;
 
         root.appendChild(entityElement);
+    }
+
+    protected startMove(){
+        this.isMoving = true;
     }
 
     public endMove(){
@@ -80,15 +85,16 @@ export default class Tower{
             root.removeChild(entityElement);
 
         entityElement = document.createElement('div');
-
+        
         this.position = {
-            x: scene.keyController.mousePosition.x / window.innerWidth,
-            y: scene.keyController.mousePosition.y / window.innerHeight
+            x: scene.keyController.mousePosition.x / window.innerWidth - 0.02,
+            y: scene.keyController.mousePosition.y / window.innerHeight - 0.02
         }
 
         entityElement.id = this.id.toString();
         entityElement.className = 'pet';
         entityElement.innerText = this.character;
+        entityElement.style.zIndex = '99999';
 
         entityElement.style.left = `${this.position.x * 100}%`;
         entityElement.style.top = `${this.position.y * 100}%`;

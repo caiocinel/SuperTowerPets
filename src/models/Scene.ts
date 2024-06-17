@@ -71,8 +71,8 @@ class Scene{
         });
     }
 
-    public renderMovingItem(){        
-
+    public renderThread(){      
+        
         if (this.drawThreadInterval)
             clearInterval(this.drawThreadInterval);
         
@@ -124,7 +124,7 @@ class Scene{
         this.inventory.draw();
         this.towers.forEach(tower => tower.draw());
 
-        this.renderMovingItem();
+        this.renderThread();
     }
 }
 
