@@ -48,13 +48,12 @@ export default class Entity{
 
         entityElement.style.left = `${x * 100}%`;
         entityElement.style.top = `${y * 100}%`; 
-        
-        console.log(entityElement.style.left);
-
+    
         root.appendChild(entityElement);
     }
 
     public destroy(){
+        this.isMoving = false;
         const root = document.getElementById('entities');
 
         if (!root)

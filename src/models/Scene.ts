@@ -102,6 +102,7 @@ class Scene{
     }
 
     public endGame(){
+        this.entities.forEach(entity => entity.destroy());
         this.game.isRunning = false;
         this.inventory.entity.hidden = false;
     }

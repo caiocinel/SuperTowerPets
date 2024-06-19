@@ -21,7 +21,17 @@ Scene.newItem({ character: '🔭' });
 Scene.newItem({ character: '🧲' });
 
 document.addEventListener('DOMContentLoaded', () => {
-  (document.getElementById('forceRender') as HTMLButtonElement).onclick = () => Scene.startGame();
+  (document.getElementById('forceRender') as HTMLButtonElement).onclick = (e) => {
+    const currentTarget = e.currentTarget as HTMLButtonElement;
+    if(currentTarget.innerText === 'Start'){
+      Scene.startGame();
+      currentTarget.innerText = 'Stop';
+    }else{
+      Scene.endGame();   
+      currentTarget.innerText = 'Start'
+    }
+    
+  };
   Scene.render()  
 });
 
