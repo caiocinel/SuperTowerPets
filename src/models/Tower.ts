@@ -87,8 +87,8 @@ export default class Tower{
         var entityElement = document.getElementById(this.id.toString()) as HTMLDivElement;                        
        
         this.position = {
-            x: (scene.keyController.mousePosition.x - this.movingOffset.x) / window.innerWidth,
-            y: (scene.keyController.mousePosition.y - this.movingOffset.y) / window.innerHeight
+            x: (scene.input.mousePosition.x - this.movingOffset.x) / window.innerWidth,
+            y: (scene.input.mousePosition.y - this.movingOffset.y) / window.innerHeight
         }       
         
         if (entityElement)

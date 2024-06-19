@@ -1,6 +1,6 @@
 import Entity from "./Entity";
 import Inventory from "./Inventory";
-import KeyController from "./KeyController";
+import Input from "./Input";
 import Tower from "./Tower";
 import Track from "./Track";
 import Tracks from "./Tracks";
@@ -10,7 +10,7 @@ class Scene{
     public entities: Entity[] = [];
     public towers: Tower[] = [];
     public inventory: Inventory = new Inventory();
-    public keyController: KeyController = new KeyController();
+    public input: Input = new Input();
 
     public drawThreadInterval: number | null = null;
 
@@ -78,7 +78,7 @@ class Scene{
         
         this.drawThreadInterval = setInterval(() => {                        
             if(this.towers.find(x => x.isMoving)){
-                if(!scene.keyController.isMouseDown)
+                if (!scene.input.isMouseDown)
                     return this.towers.filter(x => x.isMoving).forEach(tower => tower.endMove());               
 
                 this.towers.find(x => x.isMoving)?.renderMovingItem();                

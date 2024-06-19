@@ -1,4 +1,4 @@
-export default class KeyController {
+export default class Input {
     public keys: { [key: string]: boolean } = {};
     public isMouseDown: boolean = false;
     public mousePosition: { x: number, y: number } = { x: 0, y: 0 };
