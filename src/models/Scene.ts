@@ -25,9 +25,10 @@ class Scene{
         this.tracks.push(new Track({ length, orientation }));
     }
 
-    public newItem({character = '❔'}){
+    public newItem({character = '❔', range = 0}){
         const item = new Tower();
         item.character = character;
+        item.range = range;
         this.inventory.addItem(item);
     }
 
@@ -39,10 +40,11 @@ class Scene{
         this.entities.push(entity);
     }
 
-    public newTower({character = ''}){
+    public newTower({character = '', range = 0.1}){
         const tower = new Tower();
         tower.position = {x:0.5, y:0.5};
         tower.character = character;
+        tower.range = range;
         this.towers.push(tower);
         return tower;
     }
@@ -86,7 +88,7 @@ class Scene{
     }
 
     public startGame(){
-        this.inventory.entity.hidden = true;
+        this.inventory.element.hidden = true;
         this.entities.forEach(x => x.preRun());
         this.game.isRunning = true;
     }
@@ -94,7 +96,7 @@ class Scene{
     public endGame(){
         this.entities.forEach(entity => entity.destroy());
         this.game.isRunning = false;
-        this.inventory.entity.hidden = false;
+        this.inventory.element.hidden = false;
     }
 
     public async onTick(){
@@ -109,12 +111,8 @@ class Scene{
                 return alert("No tracks found");           
 
             await Promise.all(this.entities.map(async(entity) => await entity.step()));
+            await Promise.all(this.towers.map(async (towers) => await towers.hit()));
 
-
-
-
-
-            
         }, 16);
     }
     
@@ -147,7 +145,7 @@ class Scene{
         const inventory = document.createElement('div');
         inventory.id = 'inventory';
         uiRoot.appendChild(inventory);
-        this.inventory.entity = inventory;
+        this.inventory.element = inventory;
 
         const inventoryContainer = document.createElement('div');
         inventoryContainer.id = 'inventoryContainer';

@@ -1,3 +1,4 @@
+import Debug from "./Debug";
 import scene from "./Scene";
 
 export default class Tower{
@@ -6,6 +7,8 @@ export default class Tower{
     public character: string = '❓';
     public isMoving: boolean = false;
     public movingOffset: { x: number , y: number } = { x: 0, y: 0}
+    public range = 0;
+    public element: HTMLDivElement | null = null;
         
     constructor() {
         this.id = Math.random();        
@@ -31,6 +34,8 @@ export default class Tower{
 
         entityElement.style.left = `${this.position.x * 100}%`;
         entityElement.style.top = `${this.position.y * 100}%`;
+
+        this.element = entityElement;
 
         root.appendChild(entityElement);
     }
@@ -73,6 +78,34 @@ export default class Tower{
             scene.render();
         }
 
+    }
+
+    public async hit(){
+
+        const towerRange = {
+            x: this.position.x - (this.range / 100),
+            y: this.position.y - (this.range / 100),
+            width: (this.range / 100) * 2,
+            height: (this.range / 100) * 2
+        }
+        Debug.Line({ x: towerRange.x, y: towerRange.y, width: towerRange.width })
+
+
+
+
+              
+        scene.entities.forEach(entity => {
+            if(entity.isFinished)
+                return;
+
+            const entityRect = {
+                x: entity.position.x,
+                y: entity.position.y,
+            }
+
+            
+
+        })
     }
 
     public renderMovingItem() {               

@@ -1,3 +1,4 @@
+import Debug from "./models/Debug";
 import Scene from "./models/Scene";
 
 Scene.setTracksInitialPosition({x:0, y:0.3})
@@ -12,13 +13,12 @@ Scene.newTrack({length: 0.1, orientation: 'x'});
 
 
 Scene.newEntity({speed: 1, character: '🚀'});
-Scene.newEntity({ speed: 0.7, character: '🔨' });
+//Scene.newEntity({ speed: 0.7, character: '🔨' });
 
-Scene.newItem({character: '🌵'});
-Scene.newItem({ character: '🔮' });
-Scene.newItem({ character: '🧨' });
-Scene.newItem({ character: '🔭' });
-Scene.newItem({ character: '🧲' });
+Scene.newItem({ character: '🌵', range: 1 });
+Scene.newItem({ character: '🧨', range: 1.5 });
+Scene.newItem({ character: '🔭', range: 2 });
+Scene.newItem({ character: '🧲', range: 2 });
 
 document.addEventListener('DOMContentLoaded', () => {
   (document.getElementById('forceRender') as HTMLButtonElement).onclick = (e) => {

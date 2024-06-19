@@ -1,4 +1,3 @@
-import scene from "./Scene";
 import Track from "./Track";
 import Tracks from "./Tracks";
 
