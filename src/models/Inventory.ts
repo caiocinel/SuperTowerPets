@@ -18,9 +18,15 @@ export default class Inventory{
          return this.items.find(x => x.id === id);
    }
 
-    public onClick(item: InventoryItem) {
+    public onClick(item: InventoryItem, e: MouseEvent) {
         item.isInInventory = false;
-        scene.addTower(item).isMoving = true;
+        const tower = scene.addTower(item);
+        tower.isMoving = true;
+        tower.movingOffset = {
+            x: e.offsetX,
+            y: e.offsetY
+        }
+
         this.draw();
     }
 
@@ -34,7 +40,7 @@ export default class Inventory{
         this.items.filter(x => x.isInInventory).forEach(item => {
             const invItemContainer = document.createElement('div');
             invItemContainer.className = 'inventoryItemContainer';
-            invItemContainer.onmousedown = () => this.onClick(item);
+            invItemContainer.onmousedown = (e) => this.onClick(item, e);
             invItemContainer.id = String(item.id);
             
             const invItem = document.createElement('div');

@@ -5,6 +5,7 @@ export default class Tower{
     public position: { x: number, y: number; } = { x: 0, y: 0 };
     public character: string = '❓';
     public isMoving: boolean = false;
+    public movingOffset: { x: number , y: number } = { x: 0, y: 0}
         
     constructor() {
         this.id = Math.random();        
@@ -26,7 +27,7 @@ export default class Tower{
         entityElement.id = this.id.toString();
         entityElement.className = 'pet';
         entityElement.innerText = this.character;
-        entityElement.onmousedown = () => this.startMove();
+        entityElement.onmousedown = (e) => this.startMove(e);
 
         entityElement.style.left = `${this.position.x * 100}%`;
         entityElement.style.top = `${this.position.y * 100}%`;
@@ -34,8 +35,12 @@ export default class Tower{
         root.appendChild(entityElement);
     }
 
-    protected startMove(){
+    protected startMove(e: MouseEvent){
         this.isMoving = true;
+        this.movingOffset = {
+            x: e.offsetX,
+            y: e.offsetY
+        }
     }
 
     public endMove(){
@@ -79,18 +84,17 @@ export default class Tower{
         if (!root)
             return alert("Failed to find towers div");
 
-        var entityElement = document.getElementById(this.id.toString()) as HTMLDivElement;
-
+        var entityElement = document.getElementById(this.id.toString()) as HTMLDivElement;                        
+       
+        this.position = {
+            x: (scene.keyController.mousePosition.x - this.movingOffset.x) / window.innerWidth,
+            y: (scene.keyController.mousePosition.y - this.movingOffset.y) / window.innerHeight
+        }       
+        
         if (entityElement)
             root.removeChild(entityElement);
-
-        entityElement = document.createElement('div');
         
-        this.position = {
-            x: scene.keyController.mousePosition.x / window.innerWidth - 0.02,
-            y: scene.keyController.mousePosition.y / window.innerHeight - 0.02
-        }
-
+        entityElement = document.createElement('div');
         entityElement.id = this.id.toString();
         entityElement.className = 'pet';
         entityElement.innerText = this.character;
