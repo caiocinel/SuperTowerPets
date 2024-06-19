@@ -15,6 +15,7 @@ class Scene{
     public game: Game = new Game();
 
     public UIThreadInterval: number | null = null;
+    public TickThreadInterval: number | null = null;
 
     public setTracksInitialPosition({ x = 0, y = 0 }){
         this.tracks.initialPos = { x, y };
@@ -85,8 +86,9 @@ class Scene{
     }
 
     public startGame(){
-        this.game.isRunning = true;
         this.inventory.entity.hidden = true;
+        this.entities.forEach(x => x.preRun());
+        this.game.isRunning = true;
     }
 
     public endGame(){
@@ -95,16 +97,25 @@ class Scene{
         this.inventory.entity.hidden = false;
     }
 
-    public onTick(){
-        if (this.tracks.items.length === 0)
-            return alert("No tracks found");
+    public async onTick(){
+        if (this.TickThreadInterval)
+            clearTimeout(this.TickThreadInterval);
 
-        this.entities.forEach(entity => {
-            if (!entity.trackList)
-                entity.trackList = this.tracks;
+        this.TickThreadInterval = setInterval(async () => {
+            if (!this.game.isRunning)
+                return
 
-            entity.run()
-        });
+            if (this.tracks.items.length === 0)
+                return alert("No tracks found");           
+
+            await Promise.all(this.entities.map(async(entity) => await entity.step()));
+
+
+
+
+
+            
+        }, 16);
     }
     
 
@@ -147,6 +158,7 @@ class Scene{
         this.towers.forEach(tower => tower.draw());
 
         this.renderUiThread();
+        this.onTick();
     }
 }
 

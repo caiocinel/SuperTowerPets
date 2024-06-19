@@ -12,7 +12,7 @@ Scene.newTrack({length: 0.1, orientation: 'x'});
 
 
 Scene.newEntity({speed: 1, character: '🚀'});
-Scene.newEntity({speed: 0.7, character: '🔨'});
+Scene.newEntity({ speed: 0.7, character: '🔨' });
 
 Scene.newItem({character: '🌵'});
 Scene.newItem({ character: '🔮' });
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(currentTarget.innerText === 'Start'){
       Scene.startGame();
       currentTarget.innerText = 'Stop';
-    }else{
+    }else{  
       Scene.endGame();   
       currentTarget.innerText = 'Start'
     }

@@ -65,51 +65,41 @@ export default class Entity{
             root.removeChild(entityElement);
     }
 
-    public async run(){
+    public preRun(){
         if(!this.trackList)
             return alert("No tracks found");
 
         this.isMoving = true;
         this.currentTrack = this.trackList.items[0];
         this.position = { x: this.currentTrack.position.x, y: this.currentTrack.position.y };
-        this.walk();
     }
 
-    public async walk(){
-        
-        if(this.drawTimeout)
-            clearTimeout(this.drawTimeout);
+    public async step(){
+        if (!this.currentTrack || !this.trackList)
+            return this.destroy();
 
-        this.drawTimeout = setTimeout(async() => {
-            if(!this.currentTrack || !this.trackList)
-                return this.destroy();
-            
-            if(!this.isMoving)
-                return this.destroy();
+        if (!this.isMoving)
+            return this.destroy();
 
-            if(this.currentTrack.isFinished(this.position)){
-                const nextTrack = this.trackList.items[this.trackList.items.indexOf(this.currentTrack) + 1];
-                if(nextTrack){
-                    this.currentTrack = nextTrack;
-                    this.walk();
-                }
-                else{
-                    this.isMoving = false;
-                    this.isFinished = true;
-                    return this.destroy();
-                }
+        if (this.currentTrack.isFinished(this.position)) {
+            const nextTrack = this.trackList.items[this.trackList.items.indexOf(this.currentTrack) + 1];
+            if (nextTrack) {
+                this.currentTrack = nextTrack;
             }
-            else{
-                switch(this.currentTrack.orientation){
-                    case 'x': this.position.x += this.speed / 120; break;
-                    case 'y': this.position.y += this.speed / 120; break;
-                    case '-x': this.position.x -= this.speed / 120; break;
-                    case '-y': this.position.y -= this.speed / 120; break;                    
-                }                
-                this.draw();
-                this.walk();
+            else {
+                this.isMoving = false;
+                this.isFinished = true;
+                return this.destroy();
             }
-
-        }, 16);
+        }
+        else {
+            switch (this.currentTrack.orientation) {
+                case 'x': this.position.x += this.speed / 120; break;
+                case 'y': this.position.y += this.speed / 120; break;
+                case '-x': this.position.x -= this.speed / 120; break;
+                case '-y': this.position.y -= this.speed / 120; break;
+            }
+            this.draw();
+        }
     }
 }
