@@ -11,8 +11,8 @@ Scene.newTrack({length: 0.4, orientation: '-y'});
 Scene.newTrack({length: 0.1, orientation: 'x'});
 
 
-Scene.newEntity({speed: 0.3, character: '🚀'});
-Scene.newEntity({speed: 0.1, character: '🔨'});
+Scene.newEntity({speed: 1, character: '🚀'});
+Scene.newEntity({speed: 0.7, character: '🔨'});
 
 Scene.newItem({character: '🌵'});
 Scene.newItem({ character: '🔮' });
@@ -21,7 +21,7 @@ Scene.newItem({ character: '🔭' });
 Scene.newItem({ character: '🧲' });
 
 document.addEventListener('DOMContentLoaded', () => {
-  (document.getElementById('forceRender') as HTMLButtonElement).onclick = () => Scene.renderEntities();
+  (document.getElementById('forceRender') as HTMLButtonElement).onclick = () => Scene.startGame();
   Scene.render()  
 });
 

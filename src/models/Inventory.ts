@@ -8,6 +8,7 @@ interface InventoryItem extends Tower{
 
 export default class Inventory{
     public items: InventoryItem[] = [];
+    public entity!: HTMLDivElement;
 
     public addItem(item: (InventoryItem)){               
         item.isInInventory = true;

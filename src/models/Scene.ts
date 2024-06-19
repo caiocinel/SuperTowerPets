@@ -4,6 +4,7 @@ import Input from "./Input";
 import Tower from "./Tower";
 import Track from "./Track";
 import Tracks from "./Tracks";
+import Game from "./Game";
 
 class Scene{
     public tracks: Tracks = new Tracks();
@@ -11,6 +12,7 @@ class Scene{
     public towers: Tower[] = [];
     public inventory: Inventory = new Inventory();
     public input: Input = new Input();
+    public game: Game = new Game();
 
     public drawThreadInterval: number | null = null;
 
@@ -76,7 +78,14 @@ class Scene{
         if (this.drawThreadInterval)
             clearInterval(this.drawThreadInterval);
         
-        this.drawThreadInterval = setInterval(() => {                        
+        this.drawThreadInterval = setInterval(() => {                         
+            if(this.game.isRunning){
+                if(this.entities.filter(entity => !entity.isFinished).length === 0)
+                    this.endGame();
+
+                return;
+            }
+
             if(this.towers.find(x => x.isMoving)){
                 if (!scene.input.isMouseDown)
                     return this.towers.filter(x => x.isMoving).forEach(tower => tower.endMove());               
@@ -84,6 +93,17 @@ class Scene{
                 this.towers.find(x => x.isMoving)?.renderMovingItem();                
             }
         }, 16);
+    }
+
+    public startGame(){
+        this.game.isRunning = true;
+        this.renderEntities();
+        this.inventory.entity.hidden = true;
+    }
+
+    public endGame(){
+        this.game.isRunning = false;
+        this.inventory.entity.hidden = false;
     }
     
 
@@ -115,6 +135,7 @@ class Scene{
         const inventory = document.createElement('div');
         inventory.id = 'inventory';
         uiRoot.appendChild(inventory);
+        this.inventory.entity = inventory;
 
         const inventoryContainer = document.createElement('div');
         inventoryContainer.id = 'inventoryContainer';

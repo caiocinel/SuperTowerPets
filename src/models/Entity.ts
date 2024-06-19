@@ -11,6 +11,7 @@ export default class Entity{
     public speed: number;
     public drawTimeout: number | null;
     public character: string;
+    public isFinished: boolean;
         
     constructor() {
         this.id = Math.random();
@@ -21,6 +22,7 @@ export default class Entity{
         this.speed = 0.1;
         this.drawTimeout = null;
         this.character = '❓';
+        this.isFinished = false;
     }   
     
     public draw(){
@@ -93,6 +95,7 @@ export default class Entity{
                 }
                 else{
                     this.isMoving = false;
+                    this.isFinished = true;
                     return this.destroy();
                 }
             }
