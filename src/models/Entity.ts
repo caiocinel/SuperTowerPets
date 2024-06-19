@@ -86,6 +86,7 @@ export default class Entity{
             
             if(!this.isMoving)
                 return this.destroy();
+
             if(this.currentTrack.isFinished(this.position)){
                 const nextTrack = this.trackList.items[this.trackList.items.indexOf(this.currentTrack) + 1];
                 if(nextTrack){
@@ -108,6 +109,7 @@ export default class Entity{
                 this.draw();
                 this.walk();
             }
+
         }, 16);
     }
 }

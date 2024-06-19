@@ -14,7 +14,7 @@ class Scene{
     public input: Input = new Input();
     public game: Game = new Game();
 
-    public drawThreadInterval: number | null = null;
+    public UIThreadInterval: number | null = null;
 
     public setTracksInitialPosition({ x = 0, y = 0 }){
         this.tracks.initialPos = { x, y };
@@ -61,24 +61,13 @@ class Scene{
         return this.towers = this.towers.filter(x => x.id !== id);
     }
 
-    public renderEntities(){        
-        if(this.tracks.items.length === 0)
-            return alert("No tracks found");
 
-        this.entities.forEach(entity => {
-            if(!entity.trackList)
-                entity.trackList = this.tracks;
-
-            entity.run()
-        });
-    }
-
-    public renderThread(){      
+    public renderUiThread(){      
         
-        if (this.drawThreadInterval)
-            clearInterval(this.drawThreadInterval);
+        if (this.UIThreadInterval)
+            clearInterval(this.UIThreadInterval);
         
-        this.drawThreadInterval = setInterval(() => {                         
+        this.UIThreadInterval = setInterval(() => {                         
             if(this.game.isRunning){
                 if(this.entities.filter(entity => !entity.isFinished).length === 0)
                     this.endGame();
@@ -97,7 +86,6 @@ class Scene{
 
     public startGame(){
         this.game.isRunning = true;
-        this.renderEntities();
         this.inventory.entity.hidden = true;
     }
 
@@ -105,6 +93,18 @@ class Scene{
         this.entities.forEach(entity => entity.destroy());
         this.game.isRunning = false;
         this.inventory.entity.hidden = false;
+    }
+
+    public onTick(){
+        if (this.tracks.items.length === 0)
+            return alert("No tracks found");
+
+        this.entities.forEach(entity => {
+            if (!entity.trackList)
+                entity.trackList = this.tracks;
+
+            entity.run()
+        });
     }
     
 
@@ -146,7 +146,7 @@ class Scene{
         this.inventory.draw();
         this.towers.forEach(tower => tower.draw());
 
-        this.renderThread();
+        this.renderUiThread();
     }
 }
 
