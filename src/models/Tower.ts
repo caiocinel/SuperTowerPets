@@ -83,12 +83,14 @@ export default class Tower{
     public async hit(){
 
         const towerRange = {
-            x: this.position.x - (this.range / 100),
-            y: this.position.y - (this.range / 100),
+            x: this.position.x,
+            y: this.position.y,
             width: (this.range / 100) * 2,
             height: (this.range / 100) * 2
         }
         Debug.Line({ x: towerRange.x, y: towerRange.y, width: towerRange.width })
+        Debug.Line({ x: towerRange.x, y: towerRange.y + towerRange.height, width: towerRange.width })
+
 
 
 

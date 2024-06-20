@@ -4,7 +4,7 @@ class Debug {
 
     constructor() { }
 
-    public Line({ x, y, width }: { x: number, y: number, width: number }) {
+    public Line({ x, y, width, height = undefined }: { x: number, y: number, width: number, height?: number }) {
         const root = document.getElementById('app');
 
         if (!root)
@@ -17,7 +17,7 @@ class Debug {
         entityElement.style.left = `${x * 100}%`;
         entityElement.style.top = `${y * 100}%`;
         entityElement.style.width = `${width * 100}%`;
-        entityElement.style.height = '1px';
+        entityElement.style.height = height ? `${height * 100}%` : '1px';
         entityElement.style.backgroundColor = 'red';
         entityElement.style.zIndex = '9999999';
 
