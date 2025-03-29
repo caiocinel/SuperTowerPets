@@ -22,6 +22,7 @@ export default class Entity{
         this.drawTimeout = null;
         this.character = '❓';
         this.isFinished = false;
+        
     }   
     
     public draw(){
@@ -52,6 +53,7 @@ export default class Entity{
     }
 
     public destroy(){
+        console.timeEnd("Fim")
         this.isMoving = false;
         const root = document.getElementById('entities');
 
@@ -68,12 +70,14 @@ export default class Entity{
         if(!this.trackList)
             return alert("No tracks found");
 
+        console.time("Fim")
+
         this.isMoving = true;
         this.currentTrack = this.trackList.items[0];
         this.position = { x: this.currentTrack.position.x, y: this.currentTrack.position.y };
     }
 
-    public async step(){
+    public async step(deltaTime: number = 1/60){
         if (!this.currentTrack || !this.trackList)
             return this.destroy();
 
@@ -92,11 +96,14 @@ export default class Entity{
             }
         }
         else {
+            // Use deltaTime to make movement frame-rate independent
+            const moveSpeed = this.speed * deltaTime;
+            
             switch (this.currentTrack.orientation) {
-                case 'x': this.position.x += this.speed / 120; break;
-                case 'y': this.position.y += this.speed / 120; break;
-                case '-x': this.position.x -= this.speed / 120; break;
-                case '-y': this.position.y -= this.speed / 120; break;
+                case 'x': this.position.x += moveSpeed; break;
+                case 'y': this.position.y += moveSpeed; break;
+                case '-x': this.position.x -= moveSpeed; break;
+                case '-y': this.position.y -= moveSpeed; break;
             }
             this.draw();
         }

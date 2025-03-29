@@ -17,6 +17,7 @@ class Scene{
 
     public UIThreadInterval: number | null = null;
     public TickThreadInterval: number | null = null;
+    public lastFrameTime: number = 0;
 
     public setTracksInitialPosition({ x = 0, y = 0 }){
         this.tracks.initialPos = { x, y };
@@ -67,31 +68,33 @@ class Scene{
 
 
     public renderUiThread(){      
+        if (this.UIThreadInterval) 
+            cancelAnimationFrame(this.UIThreadInterval);
         
-        if (this.UIThreadInterval)
-            clearInterval(this.UIThreadInterval);
-        
-        this.UIThreadInterval = setInterval(() => {                         
+        const uiLoop = () => {                         
             if(this.game.isRunning){
                 if(this.entities.filter(entity => !entity.isFinished).length === 0)
                     this.endGame();
+            } else {
+                if(this.towers.find(x => x.isMoving)){
+                    if (!scene.input.isMouseDown)
+                        this.towers.filter(x => x.isMoving).forEach(tower => tower.endMove());               
 
-                return;
+                    this.towers.find(x => x.isMoving)?.renderMovingItem();                
+                }
             }
-
-            if(this.towers.find(x => x.isMoving)){
-                if (!scene.input.isMouseDown)
-                    return this.towers.filter(x => x.isMoving).forEach(tower => tower.endMove());               
-
-                this.towers.find(x => x.isMoving)?.renderMovingItem();                
-            }
-        }, 16);
+            
+            this.UIThreadInterval = requestAnimationFrame(uiLoop);
+        };
+        
+        this.UIThreadInterval = requestAnimationFrame(uiLoop);
     }
 
     public startGame(){
         this.inventory.element.hidden = true;
         this.entities.forEach(x => x.preRun());
         this.game.isRunning = true;
+        this.lastFrameTime = performance.now();
     }
 
     public endGame(){
@@ -102,20 +105,33 @@ class Scene{
 
     public async onTick(){
         if (this.TickThreadInterval)
-            clearTimeout(this.TickThreadInterval);
+            cancelAnimationFrame(this.TickThreadInterval);
 
-        this.TickThreadInterval = setInterval(async () => {
-            if (!this.game.isRunning)
-                return
+        this.lastFrameTime = performance.now();
+        
+        const gameLoop = async (timestamp: number) => {
+            if (!this.game.isRunning) {
+                this.TickThreadInterval = requestAnimationFrame(gameLoop);
+                return;
+            }
 
-            if (this.tracks.items.length === 0)
-                return alert("No tracks found");           
+            if (this.tracks.items.length === 0) {
+                alert("No tracks found");
+                return;
+            }
+            
+            // Calculate delta time in seconds
+            const deltaTime = (timestamp - this.lastFrameTime) / 1000;
+            this.lastFrameTime = timestamp;
             
             Debug.clear();
-            await Promise.all(this.entities.map(async(entity) => await entity.step()));
-            await Promise.all(this.towers.map(async (towers) => await towers.hit()));
+            await Promise.all(this.entities.map(async(entity) => await entity.step(deltaTime)));
+            await Promise.all(this.towers.map(async (tower) => await tower.hit(deltaTime)));
 
-        }, 16);
+            this.TickThreadInterval = requestAnimationFrame(gameLoop);
+        };
+
+        this.TickThreadInterval = requestAnimationFrame(gameLoop);
     }
     
 

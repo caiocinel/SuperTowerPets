@@ -133,7 +133,7 @@ export default class Tower{
         });
     }
 
-    public async hit(){
+    public async hit(deltaTime: number = 1/60){
         this.renderDebugHitbox();        
     }
 
