@@ -43,11 +43,9 @@ export default class Tower{
     protected startMove(e: MouseEvent){
         this.isMoving = true;
         
-        // Save the current mouse position
         const mouseX = e.clientX;
         const mouseY = e.clientY;
         
-        // Calculate the offset as the difference between mouse position and current tower position
         this.movingOffset = {
             x: mouseX - (this.position.x * window.innerWidth),
             y: mouseY - (this.position.y * window.innerHeight)
@@ -59,7 +57,6 @@ export default class Tower{
         scene.render();
 
 
-        //check if on endMove the tower is over inventoryContainer
         const inventoryContainer = document.getElementById('inventoryContainer');
         if(!inventoryContainer)
             return alert("Failed to find inventory container");

@@ -96,7 +96,6 @@ export default class Entity{
             }
         }
         else {
-            // Use deltaTime to make movement frame-rate independent
             const moveSpeed = this.speed * deltaTime;
             
             switch (this.currentTrack.orientation) {

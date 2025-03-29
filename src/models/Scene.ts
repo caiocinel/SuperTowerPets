@@ -120,7 +120,6 @@ class Scene{
                 return;
             }
             
-            // Calculate delta time in seconds
             const deltaTime = (timestamp - this.lastFrameTime) / 1000;
             this.lastFrameTime = timestamp;
             
@@ -180,7 +179,6 @@ class Scene{
 
 const scene = new Scene();
 
-//@ts-ignore
 window.scene = scene;
 
 export default scene;
