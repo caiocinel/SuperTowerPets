@@ -42,10 +42,16 @@ export default class Tower{
 
     protected startMove(e: MouseEvent){
         this.isMoving = true;
+        
+        // Save the current mouse position
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        // Calculate the offset as the difference between mouse position and current tower position
         this.movingOffset = {
-            x: e.offsetX,
-            y: e.offsetY
-        }
+            x: mouseX - (this.position.x * window.innerWidth),
+            y: mouseY - (this.position.y * window.innerHeight)
+        };
     }
 
     public endMove(){
@@ -79,35 +85,56 @@ export default class Tower{
         }
 
     }
+    
+    public hitbox(){
+        if (!this.element) return {
+            x: 0,
+            y: 0,
+            radius: 0
+        };
+
+        const elementRect = this.element.getBoundingClientRect();
+
+        const elementWidth = elementRect.width / window.innerWidth;
+        const elementHeight = elementRect.height / window.innerHeight;
+
+        const centerX = this.position.x + (elementWidth / 2);
+        const centerY = this.position.y + (elementHeight / 2);
+
+        const normalizedRadius = (this.range * 25) / Math.min(window.innerWidth, window.innerHeight);
+
+
+        return {
+            x: centerX,
+            y: centerY,
+            radius: normalizedRadius
+        }
+    }
+
+    public renderDebugHitbox() {
+        if (!this.element) return;
+        
+        const hitbox = this.hitbox();
+        
+        Debug.Circle({
+            x: hitbox.x,
+            y: hitbox.y,
+            radius: hitbox.radius,
+            color: 'rgba(255, 0, 0, 0.5)',
+            opacity: 0.3
+        });
+        
+        Debug.Text({
+            x: hitbox.x,
+            y: hitbox.y - hitbox.radius - 0.02,
+            text: `Range: ${this.range}px`,
+            color: 'white',
+            size: 12
+        });
+    }
 
     public async hit(){
-
-        const towerRange = {
-            x: this.position.x,
-            y: this.position.y,
-            width: (this.range / 100) * 2,
-            height: (this.range / 100) * 2
-        }
-        Debug.Line({ x: towerRange.x, y: towerRange.y, width: towerRange.width })
-        Debug.Line({ x: towerRange.x, y: towerRange.y + towerRange.height, width: towerRange.width })
-
-
-
-
-
-              
-        scene.entities.forEach(entity => {
-            if(entity.isFinished)
-                return;
-
-            const entityRect = {
-                x: entity.position.x,
-                y: entity.position.y,
-            }
-
-            
-
-        })
+        this.renderDebugHitbox();        
     }
 
     public renderMovingItem() {               
@@ -122,9 +149,9 @@ export default class Tower{
         var entityElement = document.getElementById(this.id.toString()) as HTMLDivElement;                        
        
         this.position = {
-            x: (scene.input.mousePosition.x - this.movingOffset.x) / window.innerWidth,
-            y: (scene.input.mousePosition.y - this.movingOffset.y) / window.innerHeight
-        }       
+            x: Math.max(0, Math.min(1, (scene.input.mousePosition.x - this.movingOffset.x) / window.innerWidth)),
+            y: Math.max(0, Math.min(1, (scene.input.mousePosition.y - this.movingOffset.y) / window.innerHeight))
+        };
         
         if (entityElement)
             root.removeChild(entityElement);

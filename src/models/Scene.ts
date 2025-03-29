@@ -5,6 +5,7 @@ import Tower from "./Tower";
 import Track from "./Track";
 import Tracks from "./Tracks";
 import Game from "./Game";
+import Debug from "./Debug";
 
 class Scene{
     public tracks: Tracks = new Tracks();
@@ -109,7 +110,8 @@ class Scene{
 
             if (this.tracks.items.length === 0)
                 return alert("No tracks found");           
-
+            
+            Debug.clear();
             await Promise.all(this.entities.map(async(entity) => await entity.step()));
             await Promise.all(this.towers.map(async (towers) => await towers.hit()));
 
