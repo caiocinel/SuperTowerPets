@@ -1,7 +1,6 @@
 import scene from "./Scene";
 import Tower from "./Tower";
 
-
 interface InventoryItem extends Tower{
     isInInventory?: boolean;
 }
@@ -22,12 +21,27 @@ export default class Inventory{
     public onClick(item: InventoryItem, e: MouseEvent) {
         item.isInInventory = false;
         const tower = scene.addTower(item);
+        
+        // Position the tower at the cursor location
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        
+        // Calculate tower position as percentage of window dimensions
+        tower.position = {
+            x: mouseX / window.innerWidth,
+            y: mouseY / window.innerHeight
+        };
+        
+        // Set up for dragging - this is critical for proper drag behavior
         tower.isMoving = true;
+        
+        // Use an appropriate offset that works with the Tower.renderMovingItem logic
+        // This essentially means "no offset" since we want the tower to follow the cursor directly
         tower.movingOffset = {
-            x: e.offsetX,
-            y: e.offsetY
-        }
-
+            x: mouseX - (tower.position.x * window.innerWidth) + 24,
+            y: mouseY - (tower.position.y * window.innerHeight) + 24
+        };
+        
         this.draw();
     }
 
