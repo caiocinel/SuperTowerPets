@@ -9,6 +9,9 @@ export default class Tower{
     public movingOffset: { x: number , y: number } = { x: 0, y: 0}
     public range = 0;
     public element: HTMLDivElement | null = null;
+    public damage: number = 10;
+    public attackCooldown: number = 0.5; // in seconds
+    public currentCooldown: number = 0;
         
     constructor() {
         this.id = Math.random();        
@@ -132,6 +135,62 @@ export default class Tower{
 
     public async hit(deltaTime: number = 1/60){
         this.renderDebugHitbox();        
+        
+        // Handle attack cooldown
+        if (this.currentCooldown > 0) {
+            this.currentCooldown -= deltaTime;
+            return;
+        }
+        
+        // Get hitbox
+        const hitbox = this.hitbox();
+        
+        // Check for entities in range
+        for (const entity of scene.entities) {
+            if (!entity.isMoving || entity.isFinished) continue;
+            
+            // Calculate distance between tower center and entity
+            const distanceX = entity.position.x - hitbox.x;
+            const distanceY = entity.position.y - hitbox.y;
+            const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            
+            // If entity is within range, damage it
+            if (distance <= hitbox.radius) {
+                const killed = entity.takeDamage(this.damage);
+                this.currentCooldown = this.attackCooldown;
+                
+                // Visual effect for attack
+                this.showAttackEffect(entity.position);
+                
+                // If entity was killed, remove it from the scene
+                if (killed) {
+                    scene.entities = scene.entities.filter(e => e.id !== entity.id);
+                }
+                
+                // For now, only damage one entity per frame
+                break;
+            }
+        }
+    }
+    
+    private showAttackEffect(targetPosition: {x: number, y: number}) {
+        const root = document.getElementById('app');
+        if (!root) return;
+        
+        const effect = document.createElement('div');
+        effect.className = 'attack-effect';
+        
+        // Position the effect between tower and target
+        const midX = (this.position.x + targetPosition.x) / 2;
+        const midY = (this.position.y + targetPosition.y) / 2;
+        
+        effect.style.left = `${midX * 100}%`;
+        effect.style.top = `${midY * 100}%`;
+        
+        root.appendChild(effect);
+        
+        // Remove effect after animation
+        setTimeout(() => effect.remove(), 300);
     }
 
     public renderMovingItem() {               

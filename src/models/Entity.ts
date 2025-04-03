@@ -1,5 +1,6 @@
 import Track from "./Track";
 import Tracks from "./Tracks";
+import Scene from "./Scene";
 
 export default class Entity{
     public id: number;
@@ -11,6 +12,8 @@ export default class Entity{
     public drawTimeout: number | null;
     public character: string;
     public isFinished: boolean;
+    public health: number;
+    public maxHealth: number;
         
     constructor() {
         this.id = Math.random();
@@ -22,7 +25,8 @@ export default class Entity{
         this.drawTimeout = null;
         this.character = '❓';
         this.isFinished = false;
-        
+        this.health = 100;
+        this.maxHealth = 100;
     }   
     
     public draw(){
@@ -42,6 +46,20 @@ export default class Entity{
         entityElement.className = 'entity';
         entityElement.innerText = this.character;
 
+        // Add health bar container
+        const healthBarContainer = document.createElement('div');
+        healthBarContainer.className = 'health-bar-container';
+        
+        // Add health bar
+        const healthBar = document.createElement('div');
+        healthBar.className = 'health-bar';
+        healthBar.style.width = `${(this.health / this.maxHealth) * 100}%`;
+        
+        // Add health bar to health bar container
+        healthBarContainer.appendChild(healthBar);
+        
+        // Add health bar container to entity
+        entityElement.appendChild(healthBarContainer);
 
         var x = this.position.x - ((9 * (Math.round(window.devicePixelRatio * 100) / 100)) / window.innerWidth);
         var y = this.position.y - ((9 * (Math.round(window.devicePixelRatio * 100) / 100)) / window.innerHeight);
@@ -50,6 +68,44 @@ export default class Entity{
         entityElement.style.top = `${y * 100}%`; 
     
         root.appendChild(entityElement);
+    }
+
+    public takeDamage(amount: number): boolean {
+        this.health = Math.max(0, this.health - amount);
+        this.draw(); // Redraw entity to update health bar
+        
+        if (this.health <= 0) {
+            // Check if this is a rocket entity
+            if (this.character === '🚀') {
+                this.spawnBalloons();
+            }
+            
+            this.destroy();
+            return true; // Entity died
+        }
+        
+        return false; // Entity still alive
+    }
+
+    private spawnBalloons(): void {
+        // Create two balloon entities at the same position
+        for (let i = 0; i < 2; i++) {
+            const balloon = new Entity();
+            balloon.character = '🎈';
+            balloon.position = { ...this.position };
+            balloon.trackList = this.trackList;
+            balloon.speed = this.speed * 1.2; // Make balloons slightly faster
+            balloon.health = this.maxHealth / 2; // Half of rocket's max health
+            balloon.maxHealth = this.maxHealth / 2;
+            balloon.isMoving = true;
+            balloon.currentTrack = this.currentTrack;
+            
+            // Add balloon to scene entities
+            if (window.scene) {
+                window.scene.entities.push(balloon);
+                balloon.draw();
+            }
+        }
     }
 
     public destroy(){

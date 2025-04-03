@@ -93,3 +93,43 @@ body {
   background: #073800;  
   border-radius: 25px;
 }
+
+.health-bar-container {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 32px;
+  height: 4px;
+  background-color: rgba(255, 0, 0, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.health-bar {
+  height: 100%;
+  background-color: rgb(255, 0, 0);
+  width: 100%;
+  transition: width 0.2s ease-in-out;
+}
+
+.attack-effect {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(255, 255, 0, 0.7);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: attack-pulse 0.3s ease-out;
+  pointer-events: none;
+}
+
+@keyframes attack-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}

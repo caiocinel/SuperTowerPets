@@ -14,6 +14,8 @@ class Scene{
     public inventory: Inventory = new Inventory();
     public input: Input = new Input();
     public game: Game = new Game();
+    // Store initial entity configurations to recreate them on restart
+    private entityConfigs: Array<{speed: number, character: string}> = [];
 
     public UIThreadInterval: number | null = null;
     public TickThreadInterval: number | null = null;
@@ -35,6 +37,9 @@ class Scene{
     }
 
     public newEntity({speed = 0.1, character = '🛠️',}){
+        // Store the configuration
+        this.entityConfigs.push({speed, character});
+        
         const entity = new Entity();
         entity.character = character;
         entity.speed = speed;
@@ -92,7 +97,23 @@ class Scene{
 
     public startGame(){
         this.inventory.element.hidden = true;
+        
+        // Clear any existing entities and recreate them with full health
+        this.entities = [];
+        
+        // Recreate all entities based on stored configurations
+        this.entityConfigs.forEach(config => {
+            const entity = new Entity();
+            entity.character = config.character;
+            entity.speed = config.speed;
+            entity.trackList = this.tracks;
+            entity.health = entity.maxHealth; // Ensure full health
+            this.entities.push(entity);
+        });
+        
+        // Initialize all entities
         this.entities.forEach(x => x.preRun());
+        
         this.game.isRunning = true;
         this.lastFrameTime = performance.now();
     }
@@ -180,5 +201,11 @@ class Scene{
 const scene = new Scene();
 
 window.scene = scene;
+
+declare global {
+    interface Window {
+        scene: Scene;
+    }
+}
 
 export default scene;

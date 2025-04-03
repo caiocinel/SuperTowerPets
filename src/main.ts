@@ -12,7 +12,7 @@ Scene.newTrack({length: 0.4, orientation: '-y'});
 Scene.newTrack({length: 0.1, orientation: 'x'});
 
 
-Scene.newEntity({speed: 1, character: '🚀'});
+Scene.newEntity({speed: 0.1, character: '🚀'});
 //Scene.newEntity({ speed: 0.7, character: '🔨' });
 
 Scene.newItem({ character: '🌵', range: 1 });
